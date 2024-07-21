@@ -1,0 +1,50 @@
+.layout {
+    display: flex;
+    min-height: 100vh;
+     
+  }
+  
+  .sidebar {
+    width: 200px;
+    padding: 20px;
+    background-color:#032141;
+    text-align: center;
+
+   
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    line-height: 3;
+    
+  }
+  
+  .sidebar li {
+    margin-bottom: 10px;
+    
+  }
+  
+  .sidebar a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px; 
+
+   
+  }
+  
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+
+  .CV{
+    font-weight: bold;
+    font-size: 50px;
+    text-align: center;
+  }
+
+  .navigation,.welcome
+  {
+    text-align: center;
+  }

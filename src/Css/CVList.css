@@ -1,0 +1,39 @@
+
+  
+  .cv-list h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .cv-list table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .cv-list th, .cv-list td {
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 1.5rem;
+  }
+  
+  .cv-list th {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .cv-list tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .cv-list tr:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .cv-list td {
+    border-radius: 5px;
+  }
+  
