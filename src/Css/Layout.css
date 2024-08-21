@@ -1,50 +1,62 @@
 .layout {
-    display: flex;
-    min-height: 100vh;
-     
-  }
-  
-  .sidebar {
-    width: 200px;
-    padding: 20px;
-    background-color:#032141;
-    text-align: center;
+  display: flex;
+  min-height: 100vh;
+}
 
-   
-  }
-  
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    line-height: 3;
-    
-  }
-  
-  .sidebar li {
-    margin-bottom: 10px;
-    
-  }
-  
-  .sidebar a {
-    text-decoration: none;
-    color: white;
-    font-size: 20px; 
+.sidebar {
+  width: 200px;
+  padding: 20px;
+  background-color: #032141;
+  text-align: center;
+}
 
-   
-  }
-  
-  .content {
-    flex-grow: 1;
-    padding: 20px;
-  }
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  line-height: 3; 
+}
 
-  .CV{
-    font-weight: bold;
-    font-size: 50px;
-    text-align: center;
-  }
+.sidebar li {
+  margin-bottom: 10px;
+}
 
-  .navigation,.welcome
-  {
-    text-align: center;
-  }
+.sidebar a {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  display: block;
+  padding: 10px 15px;
+  border-radius: 4px;
+ 
+}
+
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.CV {
+  font-weight: bold;
+  font-size: 50px;
+  text-align: center;
+}
+
+.navigation, .welcome {
+  text-align: center;
+}
+
+.sidebar-button {
+  background-color: #032141;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 20px;
+  display: block;
+  width: 100%;
+}
+
+

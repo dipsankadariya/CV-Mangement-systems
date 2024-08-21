@@ -1,0 +1,60 @@
+
+.resume {
+    font-family: 'Georgia', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .resume-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .resume-header h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #212121;
+    margin: 0 0 10px;
+  }
+  
+  .resume-header p {
+    font-size: 18px;
+    color: #757575;
+    margin: 0;
+  }
+  
+  .resume-section {
+    margin-bottom: 30px;
+  }
+  
+  .resume-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #009688;
+    border-bottom: 2px solid #009688;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .resume-section p {
+    font-size: 16px;
+    color: #424242;
+    line-height: 1.6;
+    margin: 0 0 12px;
+  }
+  
+  .resume-section ul {
+    font-size: 16px;
+    color: #424242;
+    line-height: 1.6;
+    margin: 0 0 0 20px;
+    padding: 0;
+  }
+  
+  .resume-section li {
+    margin-bottom: 8px;
+  }
