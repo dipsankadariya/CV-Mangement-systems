@@ -2,21 +2,31 @@ import React, { useState, useEffect } from 'react';
 import '../Css/CVList.css';
 
 function CVList() {
-  // State to hold the list of CVs
+  
+  const defaultCv = {
+    FullName: 'Naruto Uzumaki',
+    Email: 'naruto.uzumaki@hokage.com',
+    Phone: '123-456-7890',
+    Address: 'Konohagakure, Land of Fire',
+    Education: 'Graduated from the Ninja Academy',
+    Experience: '7 years as a Ninja',
+    Skills: 'Shadow Clone Jutsu, Rasengan, Sage Mode',
+  };
+
+
   const [cvs, setCvs] = useState([]);
 
   useEffect(() => {
-    //retrieve the stored CVs from localStorage
-    // localStorage.getItem('cvs') fetches the data associated with the key 'cvs'...
-    // tthis returns a JSON string or null if the key doesn't exist...
-    // JSON.parse() converts the JSON string back into a JavaScript object/array....
-    // || [] ensures that if localStorage.getItem('cvs') is null or JSON.parse() returns null...
-    // an empty array is used as a fallback to avoid errors
+    
     const storedCvs = JSON.parse(localStorage.getItem('cvs')) || [];
     
-    // update the state with the retrieved CVs
-    setCvs(storedCvs);
-  }, []); // empty dependency array ensures this runs only once on component mount....
+   
+    if (storedCvs.length === 0) {
+      setCvs([defaultCv]);
+    } else {
+      setCvs(storedCvs);
+    }
+  }, []);
 
   return (
     <div className="cv-list">
