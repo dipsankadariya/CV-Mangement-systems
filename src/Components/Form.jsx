@@ -15,6 +15,8 @@ function Form() {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,8 +29,8 @@ function Form() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/cvs', formData);
-      navigate('/CVList'); 
+      await axios.post(`${apiUrl}/cvs`, formData);
+      navigate('/CVList');
     } catch (error) {
       setError('Error submitting form. Please try again.');
       console.error('Error submitting form:', error);

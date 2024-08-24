@@ -6,8 +6,9 @@ import '../Css/CVList.css';
 function CVList() {
   const [cvs, setCvs] = useState([]);
   const navigate = useNavigate();
+const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
+  ;
 
- 
   const defaultCVs = [
     {
       id: 1,
@@ -34,7 +35,7 @@ function CVList() {
   useEffect(() => {
     async function fetchCvs() {
       try {
-        const response = await axios.get('http://localhost:5000/api/cvs');
+        const response = await axios.get(`${apiUrl}/cvs`);
         if (response.data.length > 0) {
           setCvs(response.data);
         } else {
@@ -46,7 +47,7 @@ function CVList() {
       }
     }
     fetchCvs();
-  }, []);
+  }, [apiUrl]);
 
   const handleUpdateTemplate = (cv) => {
     navigate('/Template', { state: { cv } });
