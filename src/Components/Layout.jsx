@@ -4,8 +4,8 @@ import '../Css/Layout.css';
 
 function Layout() {
   return (
-    <div className="layout">
-      <nav className="sidebar">
+    <div className='layout'>
+      <nav className='sidebar'>
         <ul>
           <li><Link to="/">Dashboard</Link></li>
           <li><Link to="/Form">CV Form</Link></li>
@@ -13,7 +13,7 @@ function Layout() {
           <li><Link to="/Template"><button className='sidebar-button'>Template</button></Link></li>
         </ul>
       </nav>
-      <main className="content">
+      <main className='content'>
         <Outlet />
       </main>
     </div>

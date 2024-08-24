@@ -1,10 +1,10 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from './Components/Layout';
+import CVList from './Components/CVList';
 import Dashboard from './Components/Dashboard';
 import Form from './Components/Form';
-import CVList from './Components/CVList';
-import Template from './Components/Template'; // Make sure this matches
+import Layout from './Components/Layout';
+import Template from './Components/Template';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 function App() {
   const router = createBrowserRouter([
@@ -13,23 +13,23 @@ function App() {
       element: <Layout />,
       children: [
         {
-          index: true, 
-          element: <Dashboard />
+          index: true,
+          element: <Dashboard />,
         },
         {
           path: 'Form',
-          element: <Form />
+          element: <Form />,
         },
         {
           path: 'CVList',
-          element: <CVList />
+          element: <CVList />,
         },
         {
           path: 'Template',
-          element: <Template /> // Ensure this matches
-        }
-      ]
-    }
+          element: <Template />,
+        },
+      ],
+    },
   ]);
 
   return <RouterProvider router={router} />;

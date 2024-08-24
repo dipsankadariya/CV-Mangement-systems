@@ -1,42 +1,38 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../Css/Form.css';
 
 function Form() {
   const [formData, setFormData] = useState({
-    FullName: '',
-    Email: '',
-    Phone: '',
-    Address: '',
-    Education: '',
-    Experience: '',
-    Skills: '',
+    full_name: '',
+    email: '',
+    phone: '',
+    address: '',
+    education: '',
+    experience: '',
+    skills: '',
   });
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    // Retrieve existing CVs from localStorage
-    const existingCvs = JSON.parse(localStorage.getItem('cvs')) || [];
-
-    // Add the new CV to the existing CVs array
-    const updatedCvs = [...existingCvs, formData];
-
-    // Save the updated CVs array to localStorage
-    localStorage.setItem('cvs', JSON.stringify(updatedCvs));
-
-    console.log('Form Submitted', formData);
-    navigate('/CVList'); // Navigate to the CVList page after submission
+    try {
+      await axios.post('http://localhost:5000/api/cvs', formData);
+      navigate('/CVList'); //
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
@@ -44,92 +40,79 @@ function Form() {
       <h2>CV Form</h2>
       <form onSubmit={handleSubmit}>
         <div className='form-group'>
-          <label htmlFor='FullName'>Full Name:</label>
+          <label htmlFor='full_name'>Full Name:</label>
           <input
             type='text'
-            id='FullName'
-            name='FullName'
-            placeholder='Enter your full name'
-            value={formData.FullName}
+            id='full_name'
+            name='full_name'
+            value={formData.full_name}
             onChange={handleChange}
             required
           />
         </div>
-
         <div className='form-group'>
-          <label htmlFor='Email'>Email:</label>
-          <input 
+          <label htmlFor='email'>Email:</label>
+          <input
             type='email'
-            id='Email'
-            name='Email'
-            placeholder='Enter your email address'
-            value={formData.Email}
+            id='email'
+            name='email'
+            value={formData.email}
             onChange={handleChange}
             required
           />
         </div>
-
         <div className='form-group'>
-          <label htmlFor='Phone'>Phone Number:</label>
+          <label htmlFor='phone'>Phone:</label>
           <input
             type='tel'
-            id='Phone'
-            name='Phone'
-            placeholder='Enter your phone number'
-            value={formData.Phone}
+            id='phone'
+            name='phone'
+            value={formData.phone}
             onChange={handleChange}
             required
           />
         </div>
-
         <div className='form-group'>
-          <label htmlFor='Address'>Address:</label>
-          <textarea
-            id='Address'
-            name='Address'
-            placeholder='Enter your address'
-            value={formData.Address}
-            onChange={handleChange}
-            required
-          ></textarea>
-        </div>
-         
-        <div className='form-group'>
-          <label htmlFor='Education'>Education:</label>
-          <textarea
-            id='Education'
-            name='Education'
-            placeholder='Enter your educational background'
-            value={formData.Education}
+          <label htmlFor='address'>Address:</label>
+          <input
+            type='text'
+            id='address'
+            name='address'
+            value={formData.address}
             onChange={handleChange}
             required
           />
         </div>
-
         <div className='form-group'>
-          <label htmlFor='Experience'>Work Experience:</label>
+          <label htmlFor='education'>Education:</label>
           <textarea
-            id='Experience'
-            name='Experience'
-            placeholder='Enter your work experience'
-            value={formData.Experience}
+            id='education'
+            name='education'
+            value={formData.education}
             onChange={handleChange}
             required
           />
         </div>
-
         <div className='form-group'>
-          <label htmlFor='Skills'>Skills:</label>
+          <label htmlFor='experience'>Experience:</label>
           <textarea
-            id='Skills'
-            name='Skills'
-            placeholder='Enter your skills'
-            value={formData.Skills}
+            id='experience'
+            name='experience'
+            value={formData.experience}
             onChange={handleChange}
             required
           />
         </div>
-      
+        <div className='form-group'>
+          <label htmlFor='skills'>Skills:</label>
+          <textarea
+            id='skills'
+            name='skills'
+            value={formData.skills}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <button type='submit'>Submit CV</button>
       </form>
     </div>

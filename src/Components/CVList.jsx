@@ -1,40 +1,35 @@
+
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../Css/CVList.css';
 
 function CVList() {
-  
-  const defaultCv = {
-    FullName: 'Naruto Uzumaki',
-    Email: 'naruto.uzumaki@hokage.com',
-    Phone: '123-456-7890',
-    Address: 'Konohagakure, Land of Fire',
-    Education: 'Graduated from the Ninja Academy',
-    Experience: '7 years as a Ninja',
-    Skills: 'Shadow Clone Jutsu, Rasengan, Sage Mode',
-  };
-
-
   const [cvs, setCvs] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    
-    const storedCvs = JSON.parse(localStorage.getItem('cvs')) || [];
-    
-   
-    if (storedCvs.length === 0) {
-      setCvs([defaultCv]);
-    } else {
-      setCvs(storedCvs);
+    async function fetchCvs() {
+      try {
+        const response = await axios.get('http://localhost:5000/api/cvs');
+        setCvs(response.data);
+      } catch (error) {
+        console.error('Error fetching CVs:', error);
+      }
     }
+    fetchCvs();
   }, []);
 
+  const handleUpdateTemplate = (cv) => {
+    navigate('/Template', { state: { cv } });
+  };
+
   return (
-    <div className="cv-list">
+    <div className='cv-list-container'>
       <h2>CV List</h2>
       <table>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Full Name</th>
             <th>Email</th>
             <th>Phone</th>
@@ -42,19 +37,22 @@ function CVList() {
             <th>Education</th>
             <th>Experience</th>
             <th>Skills</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {cvs.map((cv, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{cv.FullName}</td>
-              <td>{cv.Email}</td>
-              <td>{cv.Phone}</td>
-              <td>{cv.Address}</td>
-              <td>{cv.Education}</td>
-              <td>{cv.Experience}</td>
-              <td>{cv.Skills}</td>
+          {cvs.map((cv) => (
+            <tr key={cv.id}>
+              <td>{cv.full_name}</td>
+              <td>{cv.email}</td>
+              <td>{cv.phone}</td>
+              <td>{cv.address}</td>
+              <td>{cv.education}</td>
+              <td>{cv.experience}</td>
+              <td>{cv.skills}</td>
+              <td>
+                <button onClick={() => handleUpdateTemplate(cv)}>Update Template</button>
+              </td>
             </tr>
           ))}
         </tbody>
