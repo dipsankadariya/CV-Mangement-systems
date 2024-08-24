@@ -7,13 +7,42 @@ function CVList() {
   const [cvs, setCvs] = useState([]);
   const navigate = useNavigate();
 
+  // Default data for testing
+  const defaultCVs = [
+    {
+      id: 1,
+      full_name: 'Naruto Uzumaki',
+      email: 'naruto.uzumaki@hokage.com',
+      phone: '123-456-7890',
+      address: 'Konohagakure, Land of Fire',
+      education: 'Graduated from the Ninja Academy',
+      experience: '7 years as a Ninja',
+      skills: 'Shadow Clone Jutsu, Rasengan, Sage Mode',
+    },
+    {
+      id: 2,
+      full_name: 'Sakura Haruno',
+      email: 'sakura.haruno@konoha.com',
+      phone: '987-654-3210',
+      address: 'Konohagakure, Land of Fire',
+      education: 'Graduated from the Ninja Academy',
+      experience: '5 years as a Medic Ninja',
+      skills: 'Medical Ninjutsu, Strength Enhancement, Healing Jutsu',
+    }
+  ];
+
   useEffect(() => {
     async function fetchCvs() {
       try {
         const response = await axios.get('http://localhost:5000/api/cvs');
-        setCvs(response.data);
+        if (response.data.length > 0) {
+          setCvs(response.data);
+        } else {
+          setCvs(defaultCVs);
+        }
       } catch (error) {
         console.error('Error fetching CVs:', error);
+        setCvs(defaultCVs);
       }
     }
     fetchCvs();
