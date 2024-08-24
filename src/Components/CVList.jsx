@@ -7,7 +7,7 @@ function CVList() {
   const [cvs, setCvs] = useState([]);
   const navigate = useNavigate();
 
-  // Default data for testing
+ 
   const defaultCVs = [
     {
       id: 1,
@@ -49,7 +49,7 @@ function CVList() {
   }, []);
 
   const handleUpdateTemplate = (cv) => {
-    navigate('/Template', { state: { cv } }); 
+    navigate('/Template', { state: { cv } });
   };
 
   return (

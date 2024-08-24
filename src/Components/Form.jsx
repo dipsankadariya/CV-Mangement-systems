@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -14,7 +13,7 @@ function Form() {
     experience: '',
     skills: '',
   });
-
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -29,8 +28,9 @@ function Form() {
     event.preventDefault();
     try {
       await axios.post('http://localhost:5000/api/cvs', formData);
-      navigate('/CVList'); //
+      navigate('/CVList'); 
     } catch (error) {
+      setError('Error submitting form. Please try again.');
       console.error('Error submitting form:', error);
     }
   };
@@ -114,6 +114,7 @@ function Form() {
           />
         </div>
         <button type='submit'>Submit CV</button>
+        {error && <p className='error-message'>{error}</p>}
       </form>
     </div>
   );

@@ -14,10 +14,11 @@ const db = mysql.createConnection({
   database: 'cv_management_system'
 });
 
+
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to the database:', err);
-    return;
+    process.exit(1); 
   }
   console.log('Connected to the database');
 });
@@ -33,20 +34,24 @@ const defaultCVs = [
     experience: '7 years as a Ninja',
     skills: 'Shadow Clone Jutsu, Rasengan, Sage Mode',
   },
-
 ];
 
 
 const initializeDefaultData = () => {
   db.query('SELECT COUNT(*) AS count FROM cvs', (err, results) => {
-    if (err) throw err;
+    if (err) {
+      console.error('Error checking CV count:', err);
+      return;
+    }
     if (results[0].count === 0) {
       defaultCVs.forEach(cv => {
         db.query(
           'INSERT INTO cvs (full_name, email, phone, address, education, experience, skills) VALUES (?, ?, ?, ?, ?, ?, ?)',
           [cv.full_name, cv.email, cv.phone, cv.address, cv.education, cv.experience, cv.skills],
           (err) => {
-            if (err) throw err;
+            if (err) {
+              console.error('Error inserting default CV:', err);
+            }
           }
         );
       });
@@ -54,13 +59,14 @@ const initializeDefaultData = () => {
   });
 };
 
+
 initializeDefaultData();
 
 
 app.get('/api/cvs', (req, res) => {
   db.query('SELECT * FROM cvs', (err, results) => {
     if (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: 'Error retrieving CVs' });
       return;
     }
     res.json(results);
@@ -72,7 +78,11 @@ app.get('/api/cvs/:id', (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM cvs WHERE id = ?', [id], (err, results) => {
     if (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: 'Error retrieving CV' });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: 'CV not found' });
       return;
     }
     res.json(results[0]);
@@ -87,7 +97,7 @@ app.post('/api/cvs', (req, res) => {
     [full_name, email, phone, address, education, experience, skills],
     (err, result) => {
       if (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'Error adding CV' });
         return;
       }
       res.status(201).json({ id: result.insertId, ...req.body });
@@ -104,13 +114,14 @@ app.put('/api/cvs/:id', (req, res) => {
     [full_name, email, phone, address, education, experience, skills, id],
     (err) => {
       if (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'Error updating CV' });
         return;
       }
       res.status(200).json({ id, full_name, email, phone, address, education, experience, skills });
     }
   );
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
