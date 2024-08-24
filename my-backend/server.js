@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2');  
+const mysql = require('mysql2'); 
 const cors = require('cors');
 
 const app = express();
@@ -10,7 +10,7 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'password12345',  //just a dummy password..hehe
+  password: 'password12345',
   database: 'cv_management_system'
 });
 
@@ -33,7 +33,7 @@ const defaultCVs = [
     experience: '7 years as a Ninja',
     skills: 'Shadow Clone Jutsu, Rasengan, Sage Mode',
   },
-  
+
 ];
 
 
@@ -67,6 +67,19 @@ app.get('/api/cvs', (req, res) => {
   });
 });
 
+
+app.get('/api/cvs/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('SELECT * FROM cvs WHERE id = ?', [id], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(results[0]);
+  });
+});
+
+
 app.post('/api/cvs', (req, res) => {
   const { full_name, email, phone, address, education, experience, skills } = req.body;
   db.query(
@@ -78,6 +91,23 @@ app.post('/api/cvs', (req, res) => {
         return;
       }
       res.status(201).json({ id: result.insertId, ...req.body });
+    }
+  );
+});
+
+
+app.put('/api/cvs/:id', (req, res) => {
+  const { id } = req.params;
+  const { full_name, email, phone, address, education, experience, skills } = req.body;
+  db.query(
+    'UPDATE cvs SET full_name = ?, email = ?, phone = ?, address = ?, education = ?, experience = ?, skills = ? WHERE id = ?',
+    [full_name, email, phone, address, education, experience, skills, id],
+    (err) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.status(200).json({ id, full_name, email, phone, address, education, experience, skills });
     }
   );
 });

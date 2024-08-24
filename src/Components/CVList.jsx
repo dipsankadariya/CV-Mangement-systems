@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +20,7 @@ function CVList() {
   }, []);
 
   const handleUpdateTemplate = (cv) => {
-    navigate('/Template', { state: { cv } });
+    navigate('/Template', { state: { cv } }); 
   };
 
   return (

@@ -1,38 +1,18 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
 import '../Css/Template.css';
 
 function Template() {
-  const [cv, setCv] = useState({
-    full_name: 'My-CV',
-    email: 'myCV.com',
-    phone: '000-000000',
-    address: 'MyCV address',
-    education: 'Education',
-    experience: ' Experience',
-    skills: ' Skills',
-  });
-
-  const location = useLocation();
-  const { state } = location;
-
-  useEffect(() => {
-    if (state && state.cv) {
-      setCv(state.cv); 
-    } else {
-      async function fetchLatestCv() {
-        try {
-          const response = await axios.get('http://localhost:5000/api/cvs/latest');
-          setCv(response.data);
-        } catch (error) {
-          console.error('Error fetching the latest CV:', error);
-        }
-      }
-      fetchLatestCv();
-    }
-  }, [state]);
+  const { state } = useLocation();
+  const cv = state?.cv || {
+    full_name: 'Default Name',
+    email: 'default@example.com',
+    phone: '000-000-0000',
+    address: 'Default Address',
+    education: 'Default Education',
+    experience: 'Default Experience',
+    skills: 'Default Skills',
+  };
 
   return (
     <div className="resume">
