@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -7,15 +7,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+// PostgreSQL connection setup
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false 
+  }
 });
 
-db.connect((err) => {
+pool.connect((err) => {
   if (err) {
     console.error('Error connecting to the database:', err);
     process.exit(1);
@@ -35,84 +35,72 @@ const defaultCVs = [
   },
 ];
 
-const initializeDefaultData = () => {
-  db.query('SELECT COUNT(*) AS count FROM cvs', (err, results) => {
-    if (err) {
-      console.error('Error checking CV count:', err);
-      return;
-    }
-    if (results[0].count === 0) {
-      defaultCVs.forEach(cv => {
-        db.query(
-          'INSERT INTO cvs (full_name, email, phone, address, education, experience, skills) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          [cv.full_name, cv.email, cv.phone, cv.address, cv.education, cv.experience, cv.skills],
-          (err) => {
-            if (err) {
-              console.error('Error inserting default CV:', err);
-            }
-          }
+const initializeDefaultData = async () => {
+  try {
+    const result = await pool.query('SELECT COUNT(*) AS count FROM cvs');
+    if (parseInt(result.rows[0].count) === 0) {
+      for (const cv of defaultCVs) {
+        await pool.query(
+          'INSERT INTO cvs (full_name, email, phone, address, education, experience, skills) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+          [cv.full_name, cv.email, cv.phone, cv.address, cv.education, cv.experience, cv.skills]
         );
-      });
+      }
     }
-  });
+  } catch (err) {
+    console.error('Error initializing default data:', err);
+  }
 };
 
 initializeDefaultData();
 
-app.get('/api/cvs', (req, res) => {
-  db.query('SELECT * FROM cvs', (err, results) => {
-    if (err) {
-      res.status(500).json({ error: 'Error retrieving CVs' });
-      return;
-    }
-    res.json(results);
-  });
+app.get('/api/cvs', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM cvs');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Error retrieving CVs' });
+  }
 });
 
-app.get('/api/cvs/:id', (req, res) => {
+app.get('/api/cvs/:id', async (req, res) => {
   const { id } = req.params;
-  db.query('SELECT * FROM cvs WHERE id = ?', [id], (err, results) => {
-    if (err) {
-      res.status(500).json({ error: 'Error retrieving CV' });
-      return;
-    }
-    if (results.length === 0) {
+  try {
+    const result = await pool.query('SELECT * FROM cvs WHERE id = $1', [id]);
+    if (result.rows.length === 0) {
       res.status(404).json({ error: 'CV not found' });
-      return;
+    } else {
+      res.json(result.rows[0]);
     }
-    res.json(results[0]);
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Error retrieving CV' });
+  }
 });
 
-app.post('/api/cvs', (req, res) => {
+app.post('/api/cvs', async (req, res) => {
   const { full_name, email, phone, address, education, experience, skills } = req.body;
-  db.query(
-    'INSERT INTO cvs (full_name, email, phone, address, education, experience, skills) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    [full_name, email, phone, address, education, experience, skills],
-    (err, result) => {
-      if (err) {
-        res.status(500).json({ error: 'Error adding CV' });
-        return;
-      }
-      res.status(201).json({ id: result.insertId, ...req.body });
-    }
-  );
+  try {
+    const result = await pool.query(
+      'INSERT INTO cvs (full_name, email, phone, address, education, experience, skills) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+      [full_name, email, phone, address, education, experience, skills]
+    );
+    res.status(201).json({ id: result.rows[0].id, ...req.body });
+  } catch (err) {
+    res.status(500).json({ error: 'Error adding CV' });
+  }
 });
 
-app.put('/api/cvs/:id', (req, res) => {
+app.put('/api/cvs/:id', async (req, res) => {
   const { id } = req.params;
   const { full_name, email, phone, address, education, experience, skills } = req.body;
-  db.query(
-    'UPDATE cvs SET full_name = ?, email = ?, phone = ?, address = ?, education = ?, experience = ?, skills = ? WHERE id = ?',
-    [full_name, email, phone, address, education, experience, skills, id],
-    (err) => {
-      if (err) {
-        res.status(500).json({ error: 'Error updating CV' });
-        return;
-      }
-      res.status(200).json({ id, full_name, email, phone, address, education, experience, skills });
-    }
-  );
+  try {
+    await pool.query(
+      'UPDATE cvs SET full_name = $1, email = $2, phone = $3, address = $4, education = $5, experience = $6, skills = $7 WHERE id = $8',
+      [full_name, email, phone, address, education, experience, skills, id]
+    );
+    res.status(200).json({ id, full_name, email, phone, address, education, experience, skills });
+  } catch (err) {
+    res.status(500).json({ error: 'Error updating CV' });
+  }
 });
 
 const PORT = process.env.PORT || 5000;
