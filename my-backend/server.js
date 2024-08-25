@@ -7,11 +7,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Database connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 3306 // Default port is 3306 if not specified
 });
 
 db.connect((err) => {
@@ -35,6 +37,7 @@ const defaultCVs = [
   },
 ];
 
+// Initialize default data
 const initializeDefaultData = () => {
   db.query('SELECT COUNT(*) AS count FROM cvs', (err, results) => {
     if (err) {
@@ -59,6 +62,7 @@ const initializeDefaultData = () => {
 
 initializeDefaultData();
 
+// API Routes
 app.get('/api/cvs', (req, res) => {
   db.query('SELECT * FROM cvs', (err, results) => {
     if (err) {
@@ -115,5 +119,6 @@ app.put('/api/cvs/:id', (req, res) => {
   );
 });
 
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
