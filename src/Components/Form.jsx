@@ -17,7 +17,6 @@ function Form() {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -29,11 +28,20 @@ function Form() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`${apiUrl}/cvs`, formData);
+      const response = await axios.post(`${apiUrl}/cvs`, formData);
+      console.log('Form submitted successfully:', response.data);
       navigate('/CVList');
     } catch (error) {
-      setError('Error submitting form. Please try again.');
-      console.error('Error submitting form:', error);
+      if (error.response) {
+        console.error('Server Error:', error.response.data);
+        setError('Server error. Please try again.');
+      } else if (error.request) {
+        console.error('Network Error:', error.request);
+        setError('Network error. Please check your internet connection and try again.');
+      } else {
+        console.error('Error:', error.message);
+        setError('Error submitting form. Please try again.');
+      }
     }
   };
 
@@ -50,6 +58,7 @@ function Form() {
             value={formData.full_name}
             onChange={handleChange}
             required
+            autoComplete='name'
           />
         </div>
         <div className='form-group'>
@@ -61,6 +70,7 @@ function Form() {
             value={formData.email}
             onChange={handleChange}
             required
+            autoComplete='email'
           />
         </div>
         <div className='form-group'>
@@ -72,6 +82,7 @@ function Form() {
             value={formData.phone}
             onChange={handleChange}
             required
+            autoComplete='tel'
           />
         </div>
         <div className='form-group'>
@@ -83,6 +94,7 @@ function Form() {
             value={formData.address}
             onChange={handleChange}
             required
+            autoComplete='street-address'
           />
         </div>
         <div className='form-group'>

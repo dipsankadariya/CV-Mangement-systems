@@ -6,8 +6,7 @@ import '../Css/CVList.css';
 function CVList() {
   const [cvs, setCvs] = useState([]);
   const navigate = useNavigate();
-const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
-  ;
+  const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 
   const defaultCVs = [
     {
