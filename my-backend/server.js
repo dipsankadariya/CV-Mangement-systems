@@ -1,29 +1,28 @@
 const express = require('express');
-const mysql = require('mysql2'); 
+const mysql = require('mysql2');
 const cors = require('cors');
+require('dotenv').config(); // Load environment variables from a .env file
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password12345',
-  database: 'cv_management_system'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
-
 
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to the database:', err);
-    process.exit(1); 
+    process.exit(1);
   }
   console.log('Connected to the database');
 });
 
-
+// Default CVs data (unchanged)
 const defaultCVs = [
   {
     full_name: 'Naruto Uzumaki',
@@ -35,7 +34,6 @@ const defaultCVs = [
     skills: 'Shadow Clone Jutsu, Rasengan, Sage Mode',
   },
 ];
-
 
 const initializeDefaultData = () => {
   db.query('SELECT COUNT(*) AS count FROM cvs', (err, results) => {
@@ -59,9 +57,7 @@ const initializeDefaultData = () => {
   });
 };
 
-
 initializeDefaultData();
-
 
 app.get('/api/cvs', (req, res) => {
   db.query('SELECT * FROM cvs', (err, results) => {
@@ -72,7 +68,6 @@ app.get('/api/cvs', (req, res) => {
     res.json(results);
   });
 });
-
 
 app.get('/api/cvs/:id', (req, res) => {
   const { id } = req.params;
@@ -89,7 +84,6 @@ app.get('/api/cvs/:id', (req, res) => {
   });
 });
 
-
 app.post('/api/cvs', (req, res) => {
   const { full_name, email, phone, address, education, experience, skills } = req.body;
   db.query(
@@ -104,7 +98,6 @@ app.post('/api/cvs', (req, res) => {
     }
   );
 });
-
 
 app.put('/api/cvs/:id', (req, res) => {
   const { id } = req.params;
@@ -121,7 +114,6 @@ app.put('/api/cvs/:id', (req, res) => {
     }
   );
 });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
