@@ -1,13 +1,12 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-require('dotenv').config(); // Load environment variables from a .env file
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Database connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -24,7 +23,6 @@ db.connect((err) => {
   console.log('Connected to the database');
 });
 
-// Default CVs data
 const defaultCVs = [
   {
     full_name: 'Naruto Uzumaki',
@@ -37,7 +35,6 @@ const defaultCVs = [
   },
 ];
 
-// Initialize default data
 const initializeDefaultData = () => {
   db.query('SELECT COUNT(*) AS count FROM cvs', (err, results) => {
     if (err) {
@@ -62,7 +59,6 @@ const initializeDefaultData = () => {
 
 initializeDefaultData();
 
-// API Routes
 app.get('/api/cvs', (req, res) => {
   db.query('SELECT * FROM cvs', (err, results) => {
     if (err) {
@@ -119,6 +115,5 @@ app.put('/api/cvs/:id', (req, res) => {
   );
 });
 
-// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
