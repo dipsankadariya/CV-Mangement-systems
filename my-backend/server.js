@@ -10,10 +10,10 @@ app.use(express.json());
 // Database connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT, // Make sure to add this line
+  port: process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME // Default port is 3306 if not specified
+  database: process.env.DB_NAME
 });
 
 db.connect((err) => {
@@ -24,7 +24,7 @@ db.connect((err) => {
   console.log('Connected to the database');
 });
 
-// Default CVs data (unchanged)
+// Default CVs data
 const defaultCVs = [
   {
     full_name: 'Naruto Uzumaki',
