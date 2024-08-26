@@ -5,6 +5,7 @@ import '../Css/CVList.css';
 
 function CVList() {
   const [cvs, setCvs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 
@@ -43,6 +44,8 @@ function CVList() {
       } catch (error) {
         console.error('Error fetching CVs:', error);
         setCvs(defaultCVs);
+      } finally {
+        setLoading(false);
       }
     }
     fetchCvs();
@@ -51,6 +54,10 @@ function CVList() {
   const handleUpdateTemplate = (cv) => {
     navigate('/Template', { state: { cv } });
   };
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
 
   return (
     <div className='cv-list-container'>
