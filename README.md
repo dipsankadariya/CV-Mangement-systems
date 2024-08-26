@@ -1,8 +1,25 @@
-# React + Vite
+# CV Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
+The **CV Management System** is a Full stack web application that allows users to create, manage, and store their CVs. It provides a simple interface for inputting personal information, educational background, work experience, and skills, which are then stored in a PostgreSQL database. The application also includes default data for demonstration purposes.
 
-Currently, two official plugins are available:
+## Features
+- **User-Friendly Interface:** Easy-to-use form for entering CV details.
+- **Dynamic CV Generation:** Automatically generates a CV from user data.
+- **Database Integration:** Stores CV data in a PostgreSQL database.
+- **Default CVs:** Preloaded CVs for quick demonstration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
+- **Frontend:**
+  - React.js
+  - CSS Modules
+- **Backend:**
+  - Node.js
+  - Express.js
+- **Database:**
+  - PostgreSQL
+- **Hosting:**
+  - Vercel (Frontend)
+  - Render (Backend)
+
+
