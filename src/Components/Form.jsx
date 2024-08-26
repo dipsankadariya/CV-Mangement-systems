@@ -48,7 +48,7 @@ function Form() {
   return (
     <div className='form-container'>
       <h2>CV Form</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <div className='form-group'>
           <label htmlFor='full_name'>Full Name:</label>
           <input
@@ -58,7 +58,6 @@ function Form() {
             value={formData.full_name}
             onChange={handleChange}
             required
-            autoComplete='name'
           />
         </div>
         <div className='form-group'>
@@ -70,7 +69,6 @@ function Form() {
             value={formData.email}
             onChange={handleChange}
             required
-            autoComplete='email'
           />
         </div>
         <div className='form-group'>
@@ -82,7 +80,6 @@ function Form() {
             value={formData.phone}
             onChange={handleChange}
             required
-            autoComplete='tel'
           />
         </div>
         <div className='form-group'>
@@ -94,7 +91,6 @@ function Form() {
             value={formData.address}
             onChange={handleChange}
             required
-            autoComplete='street-address'
           />
         </div>
         <div className='form-group'>
