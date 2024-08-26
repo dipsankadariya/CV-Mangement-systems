@@ -4,7 +4,14 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+// Updated CORS configuration
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://cv-mangement-systems.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 // PostgreSQL connection setup
@@ -45,6 +52,7 @@ const initializeDefaultData = async () => {
           [cv.full_name, cv.email, cv.phone, cv.address, cv.education, cv.experience, cv.skills]
         );
       }
+      console.log('Default data initialized');
     }
   } catch (err) {
     console.error('Error initializing default data:', err);
@@ -53,11 +61,16 @@ const initializeDefaultData = async () => {
 
 initializeDefaultData();
 
+app.get('/', (req, res) => {
+  res.send('CV Management System API is running');
+});
+
 app.get('/api/cvs', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM cvs');
     res.json(result.rows);
   } catch (err) {
+    console.error('Error retrieving CVs:', err);
     res.status(500).json({ error: 'Error retrieving CVs' });
   }
 });
@@ -72,6 +85,7 @@ app.get('/api/cvs/:id', async (req, res) => {
       res.json(result.rows[0]);
     }
   } catch (err) {
+    console.error('Error retrieving CV:', err);
     res.status(500).json({ error: 'Error retrieving CV' });
   }
 });
@@ -85,6 +99,7 @@ app.post('/api/cvs', async (req, res) => {
     );
     res.status(201).json({ id: result.rows[0].id, ...req.body });
   } catch (err) {
+    console.error('Error adding CV:', err);
     res.status(500).json({ error: 'Error adding CV' });
   }
 });
@@ -99,6 +114,7 @@ app.put('/api/cvs/:id', async (req, res) => {
     );
     res.status(200).json({ id, full_name, email, phone, address, education, experience, skills });
   } catch (err) {
+    console.error('Error updating CV:', err);
     res.status(500).json({ error: 'Error updating CV' });
   }
 });
