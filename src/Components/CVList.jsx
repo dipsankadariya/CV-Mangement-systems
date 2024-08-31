@@ -72,7 +72,7 @@ function CVList() {
             <th>Education</th>
             <th>Experience</th>
             <th>Skills</th>
-            <th>Actions</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>

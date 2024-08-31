@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const app = express();
 
-// Updated CORS configuration
+
 app.use(cors({
   origin: ['http://localhost:5173', 'https://cv-mangement-systems.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -14,7 +14,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// PostgreSQL connection setup
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
